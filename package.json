@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/Mamun128169/real-time-chat-application#readme",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.7",
     "cross-env": "^7.0.3",
     "dotenv": "^16.5.0",
@@ -26,6 +27,7 @@
     "express-validator": "^7.2.1",
     "http-errors": "^2.0.0",
     "mongoose": "^8.14.1",
+    "multer": "^1.4.5-lts.2",
     "nodemon": "^3.1.10"
   }
 }
