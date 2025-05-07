@@ -13,12 +13,13 @@ const {
   addUserValidators,
   addUserValidationHandler,
 } = require("../middlewares/users/userValidators");
+const authenticateUser = require("../middlewares/common/AuthenticateUser");
 
 // define users router
 const router = express.Router();
 
 // get users page
-router.get("/", decorateHtmlResponse("Users"), getUsers);
+router.get("/", decorateHtmlResponse("Users"), authenticateUser, getUsers);
 
 // create user
 router.post(
