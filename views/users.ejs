@@ -1,10 +1,4 @@
 <%- include("./partials/header.ejs") %>
-  <body>
-    <div class="menu">
-      <div class="menu-item"><a href="/inbox">Inbox</a></div>
-      <div class="menu-item"><a href="/users">Users</a></div>
-      <div class="menu-item"><a href="/">Login</a></div>
-    </div>
 
     <div class="manageUser-container">
       <div id="title">
@@ -25,52 +19,50 @@
             </tr>
           </thead>
           <tbody id="users-table">
-            <tr id="">
-              <td class="name">
-                <img src="./images/user1.png" />
-                <span>User 1</span>
-              </td>
-              <td>email@email.com</td>
-              <td class="manage">
-                <img src="./images/trash.png" alt="Delete" />
-              </td>
-            </tr>
-          </tbody>
+            <% users.forEach((user) => { %>
+              <tr id="<%= user._id %>">
+                <td class="name">
+                  <img src="<%= user.avatar ? '/uploads/avatars/' + user.avatar : '/images/nophoto.png' %>" />
+                  <span><%= user.name %></span>
+                </td>
+                <td><%= user.email %></td>
+                <td class="manage">
+                  <img onclick="deleteUser('<%= user._id %>')" src="./images/trash.png" alt="Delete" style="cursor: pointer;" />
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>          
         </table>
       </div>
     </div>
+    <%- include("./partials/modal.ejs") %>
 
-    <div class="modal-wrapper" id="add-user-modal">
-      <div class="modal">
-        <a href="#" onclick="closeModal()" class="modal-close">+</a>
-        <div class="modal-title">
-          <h2>Create New User</h2>
-        </div>
-        <div class="modal-body">
-          <form id="add-user-form">
-            <input type="text" placeholder="enter name" name="name" />
-            <p class="error show">This is error</p>
-            <input type="text" placeholder="enter email" name="email" />
-            <input type="text" placeholder="enter mobile" name="mobile" />
-            <input
-              type="password"
-              placeholder="enter password"
-              name="password"
-            />
-            <input type="file" name="avatar" />
-            <input type="submit" value="Submit" />
-          </form>
-        </div>
-      </div>
-    </div>
-    <script>
-      const modal = document.querySelector("#add-user-modal");
-      function closeModal() {
-        modal.style.display = "none";
+    <!-- script -->
+     <script>
+      // toasts
+      const deleteToast = Toastify({
+        text: "User was deleted successfully!",
+        duration: 3000,
+      })
+
+      const deleteErrorToast = Toastify({
+        text: "Could not delete the user!",
+        duration: 3000,
+      })
+      // delete user function
+      const deleteUser = async (userId) => {
+        let response = await fetch(`/users/${userId}`, {
+          method: "DELETE",
+        })
+        let result = response.json();
+
+        if (result.errors) {
+          deleteErrorToast.showToast();
+        } else {
+          deleteToast.showToast();
+          document.getElementById(userId).remove();
+        }
       }
-      function openModal() {
-        modal.style.display = "block";
-      }
-    </script>
+     </script>
   </body>
 </html>

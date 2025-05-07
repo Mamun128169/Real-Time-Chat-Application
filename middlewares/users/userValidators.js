@@ -23,7 +23,7 @@ const addUserValidators = [
     .trim()
     .custom(async (value) => {
       try {
-        const user = await User.find({ email: value });
+        const user = await User.findOne({ email: value });
         if (user) {
           throw createError("Email already in use!");
         }
@@ -39,7 +39,7 @@ const addUserValidators = [
     .withMessage("Mobile number must be a valid bangladeshi mobile number")
     .custom(async (value) => {
       try {
-        const user = await User.find({ mobile: value });
+        const user = await User.findOne({ mobile: value });
         if (user) {
           throw createError("Mobile already in use!");
         }
@@ -64,7 +64,7 @@ const addUserValidationHandler = (req, res, next) => {
     next();
   } else {
     // remove the uploaded file
-    if (req.files.length > 0) {
+    if (req.files?.length > 0) {
       const { filename } = req.files[0];
       unlink(
         path.join(__dirname, `/../public/uploads/avatars/${filename}`),
